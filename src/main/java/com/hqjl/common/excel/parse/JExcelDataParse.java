@@ -147,14 +147,14 @@ public class JExcelDataParse {
             int rowColumnCount = startColumnCount;
             for (String key : keys) {
                 Object value = rowData.get(key);
-                numType=customTypeTransform.containsKey(key)?customTypeTransform.get(key):numType;
+                int numTypeNow=customTypeTransform.containsKey(key)?customTypeTransform.get(key):numType;
                 if(ObjectHelper.isNotEmpty(value)) {
                     if(value instanceof ExcelCellData){
                         ExcelCellData excelCellData = (ExcelCellData) value;
                         cellBeans.add(new CellBean(String.valueOf(excelCellData.getName()),startRowCount,rowColumnCount,
-                            excelCellData.getxSize(),excelCellData.getySize(),numType));
+                            excelCellData.getxSize(),excelCellData.getySize(),numTypeNow));
                     }else {
-                        CellBean cellBean = new CellBean(String.valueOf(value), startRowCount, rowColumnCount, xSizeMap.get(key), 1,numType);
+                        CellBean cellBean = new CellBean(String.valueOf(value), startRowCount, rowColumnCount, xSizeMap.get(key), 1,numTypeNow);
                         cellBeans.add(cellBean);
                     }
                 }
