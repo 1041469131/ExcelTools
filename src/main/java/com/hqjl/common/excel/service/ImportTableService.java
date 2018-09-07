@@ -85,7 +85,6 @@ public class ImportTableService {
                         if (cellHandlerMap.containsKey(c)) {
                              cellValue=cellHandlerMap.get(c).readCell(cell)+"";
                         } else {
-                            cell.setCellType(Cell.CELL_TYPE_STRING);
                             Integer type = forceCellType.get(c);
                             if (type != null) {
                                 cell.setCellType(type);
@@ -102,12 +101,15 @@ public class ImportTableService {
                                 if (DateUtil.isCellDateFormatted(cell)) {
                                     Date date2 = cell.getDateCellValue();
                                     SimpleDateFormat dff = new SimpleDateFormat(dateFormat);
-                                    cellValue = dff.format(date2);   //日期转化
+                                    //日期转化
+                                    cellValue = dff.format(date2);
                                 } else {
+                                    //此处返回的是列数
                                     cellValue = String.valueOf(cell.getNumericCellValue());
                                 }
                             } else if (Cell.CELL_TYPE_STRING == cell.getCellType()) {
-                                cellValue = cell.getStringCellValue();
+                                    cellValue = cell.getStringCellValue();
+
                             }
                             if (cellValue != null && cellValue instanceof String) {
                                 cellValue = cellValue.toString().trim();

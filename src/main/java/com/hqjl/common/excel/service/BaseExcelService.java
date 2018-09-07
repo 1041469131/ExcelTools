@@ -165,13 +165,18 @@ public class BaseExcelService {
      * @return
      */
     public static Row addRow(Sheet sheet,int row,String[] data){
-        Row sheetRow = sheet.createRow(row);
-        CellStyle style = sheet.getWorkbook().createCellStyle(); // 样式对象
+        Row sheetRow =sheet.getRow(row)==null?sheet.createRow(row):sheet.getRow(row);
+        // 样式对象
+        CellStyle style = sheet.getWorkbook().createCellStyle();
         style.setWrapText(true);
         for(int i=0;i<data.length;i++){
-            Cell cell = sheetRow.createCell(i);
+            Cell cell = sheetRow.getCell(i)==null?sheetRow.createCell(i):sheetRow.getCell(i);
             cell.setCellValue(data[i]);
-            cell.setCellStyle(style);
+            CellStyle cellStyle= cell.getCellStyle();
+            if(cellStyle==null){
+                cellStyle=style;
+            }
+            cell.setCellStyle(cellStyle);
         }
         return sheetRow;
     }

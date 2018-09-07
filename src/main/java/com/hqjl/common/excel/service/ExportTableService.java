@@ -17,13 +17,13 @@
 package com.hqjl.common.excel.service;
 
 import com.hqjl.common.excel.bean.FormatType;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 
 import com.hqjl.common.excel.bean.CellBean;
 import com.hqjl.common.excel.bean.TableBean;
 import com.hqjl.common.excel.json.JsonUtil;
 import com.hqjl.common.excel.utils.ObjectHelper;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -38,11 +38,21 @@ import org.apache.poi.ss.util.CellRangeAddress;
 public class ExportTableService extends BaseExcelService {
     private final  Sheet sheet;
     private final TableBean tableBean;
+    private String dateFormat = "yyyy-MM-dd HH:mm:ss";
+
 
     public ExportTableService(Sheet sheet, TableBean tableBean) {
         this.sheet = sheet;
         this.tableBean = tableBean;
         ini();
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
     }
 
     /**
@@ -101,12 +111,19 @@ public class ExportTableService extends BaseExcelService {
                     //对字符窜的处理
                     if(FormatType.STR==FormatType.valueOf(cellBean.getNumType())){
                         cell.setCellValue(cellBean.getContent());
+                    }else if(FormatType.DATE==FormatType.valueOf(cellBean.getNumType())){
+                        String content = cellBean.getContent().trim();
+                        if(content.indexOf(".")>0){
+                            content=content.substring(0,content.indexOf("."));
+                        }
+                        SimpleDateFormat dff = new SimpleDateFormat(getDateFormat());
+                        cell.setCellValue(dff.parse(content));
                     }else {
                         //默认的处理方法
                         double v = Double.parseDouble(cellBean.getContent().trim());
                         cell.setCellValue(v);
                     }
-                }catch (NumberFormatException e){
+                }catch (Exception e){
                     cell.setCellValue(cellBean.getContent());
                 }
             }

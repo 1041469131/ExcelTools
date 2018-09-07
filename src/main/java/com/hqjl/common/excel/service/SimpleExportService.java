@@ -50,6 +50,10 @@ public class SimpleExportService extends BaseExcelService {
     protected  Sheet sheet;
     private Workbook workbook;
 
+    private Integer titleRow;
+    private Integer columnRow;
+    private Integer startRow;
+
     private final Map<String ,String> fieldDicMap=new HashMap<String, String>();
 
     public SimpleExportService(Sheet sheet,List data,String[] fieldNames,String title) {
@@ -74,17 +78,19 @@ public class SimpleExportService extends BaseExcelService {
      */
     private void createHead(){
         log.debug("生成表头");
-        Row hashRow = sheet.createRow(this.hashRow);
+       // Row hashRow = sheet.createRow(this.hashRow);
         if(title!=null) {
-            addTitle(sheet, TITLE_ROW, fieldNames.length, language.translate(title));
-            Row row = createRow(sheet, HIDDENFIELDHEAD, fieldNames.length);
+            titleRow=titleRow==null?TITLE_ROW:titleRow;
+            addTitle(sheet, titleRow, fieldNames.length, language.translate(title));
+          //  Row row = createRow(sheet, HIDDENFIELDHEAD, fieldNames.length);
         }
         List<String> columns=new ArrayList(fieldNames.length);
         for (String fieldName : fieldNames) {
             columns.add(language.translate(fieldName));
         }
-        addRow(sheet, COLUMN_ROW, columns.toArray(new String[]{}));
-        hashRow.setHeight(Short.valueOf("0"));
+        columnRow=columnRow==null?COLUMN_ROW:columnRow;
+        addRow(sheet, columnRow, columns.toArray(new String[]{}));
+      //  hashRow.setHeight(Short.valueOf("0"));
         //row.setHeight(Short.valueOf("0"));
         log.debug("表头生成完毕");
     }
@@ -98,8 +104,9 @@ public class SimpleExportService extends BaseExcelService {
         if (ObjectHelper.isNotEmpty(data)) {
             for (int r = 0; r < data.size(); r++) {
                 Object object = data.get(r);
-                log.debug("写入第{}行", START_ROW + r);
-                Row row = createRow(sheet, START_ROW + r, fieldNames.length);
+                startRow=startRow==null?START_ROW:startRow;
+                log.debug("写入第{}行", startRow + r);
+                Row row = createRow(sheet, startRow + r, fieldNames.length);
                 for (int i = 0; i < fieldNames.length; i++) {
                     Object value = fieldNames[i].contains(".") ? FieldUtils.getSuperFieldValue(object, fieldNames[i]) : FieldUtils.getFieldValue(object, fieldNames[i]);
                     if(value == null){continue;}
@@ -164,6 +171,33 @@ public class SimpleExportService extends BaseExcelService {
 
     public void setWorkbook(Workbook workbook) {
         this.workbook = workbook;
+    }
+
+    public Integer getTitleRow() {
+        return titleRow;
+    }
+
+    public SimpleExportService setTitleRow(Integer titleRow) {
+        this.titleRow = titleRow;
+        return this;
+    }
+
+    public Integer getColumnRow() {
+        return columnRow;
+    }
+
+    public SimpleExportService setColumnRow(Integer columnRow) {
+        this.columnRow = columnRow;
+        return this;
+    }
+
+    public Integer getStartRow() {
+        return startRow;
+    }
+
+    public SimpleExportService setStartRow(Integer startRow) {
+        this.startRow = startRow;
+        return this;
     }
 }
 

@@ -22,7 +22,11 @@ public enum FormatType {
     /**
      * 字符窜
      */
-    STR(2);
+    STR(2),
+    /**
+     * 日期类型
+     */
+    DATE(3);
     private int numType;
 
     FormatType(int numType){
