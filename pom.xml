@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>thirdparty</groupId>
     <artifactId>jexcel</artifactId>
-    <version>1.7-SNAPSHOT</version>
+    <version>1.8-SNAPSHOT</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -54,4 +54,11 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <distributionManagement>
+        <repository>
+            <id>HQJL</id>
+            <name>HQJL</name>
+            <url>http://scm.nicezhuanye.com/artifactory/HQJL</url>
+        </repository>
+    </distributionManagement>
 </project>

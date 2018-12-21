@@ -118,6 +118,9 @@ public class ExportTableService extends BaseExcelService {
                         }
                         SimpleDateFormat dff = new SimpleDateFormat(getDateFormat());
                         cell.setCellValue(dff.parse(content));
+                    }else if(FormatType.INT==FormatType.valueOf(cellBean.getNumType())){
+                       Integer intValue= Double.valueOf(cellBean.getContent().trim()).intValue();
+                       cell.setCellValue(intValue.doubleValue());
                     }else {
                         //默认的处理方法
                         double v = Double.parseDouble(cellBean.getContent().trim());

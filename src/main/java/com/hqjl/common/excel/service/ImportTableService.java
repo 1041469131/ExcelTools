@@ -18,8 +18,10 @@ package com.hqjl.common.excel.service;
 
 import com.hqjl.common.excel.bean.BaseExcelVo;
 import com.hqjl.common.excel.bean.CellBean;
+import com.hqjl.common.excel.bean.FormatType;
 import com.hqjl.common.excel.bean.TableBean;
 import com.hqjl.common.excel.handler.LoadCellHandler;
+import com.hqjl.common.excel.parse.JExcelDataParse;
 import com.hqjl.common.excel.utils.FieldUtils;
 import com.hqjl.common.excel.utils.Reflections;
 import org.apache.poi.ss.usermodel.Cell;
@@ -47,6 +49,8 @@ public class ImportTableService {
     private Map<Integer, Integer> forceCellType = new HashMap();
     private String dateFormat = "yyyy/MM/dd";
     private Map<Integer, LoadCellHandler> cellHandlerMap = new HashMap<Integer, LoadCellHandler>();
+    private Map<String, Integer> customTypeTransform = new HashMap();
+
 
     public ImportTableService(Sheet sheet) {
         this.sheet = sheet;
@@ -167,9 +171,21 @@ public class ImportTableService {
                             cell = sheet.getRow(i).createCell(j);
                         }
                         if (bean instanceof Map) {
-                           // FieldUtils.setFieldValue(bean, "cell" + column, cell);
                             if (ObjectHelper.isNotEmpty(cellBean.getContent())) {
-                                FieldUtils.setFieldValue(bean, column, cellBean.getContent());
+                                Integer customType = customTypeTransform.get(column);
+                                if(customType!=null){
+                                    if(FormatType.INT==FormatType.valueOf(customType)){
+                                        try {
+                                            Integer intValue = Double.valueOf(cellBean.getContent().trim()).intValue();
+                                            FieldUtils.setFieldValue(bean, column, intValue);
+                                        }catch (Exception e){
+                                            FieldUtils.setFieldValue(bean, column, cellBean.getContent());
+                                        }
+                                    }
+                                   //TODO 扩展字段类型
+                               }else {
+                                   FieldUtils.setFieldValue(bean, column, cellBean.getContent());
+                               }
                             }
                         } else {
                             if (bean instanceof BaseExcelVo) {
@@ -235,4 +251,8 @@ public class ImportTableService {
         this.dateFormat = dateFormat;
     }
 
+    public ImportTableService putCustomTypeTransform(String key, FormatType formatType) {
+        this.customTypeTransform.put(key, formatType.getNumType());
+        return this;
+    }
 }

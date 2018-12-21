@@ -26,7 +26,9 @@ public enum FormatType {
     /**
      * 日期类型
      */
-    DATE(3);
+    DATE(3),
+
+    INT(4);
     private int numType;
 
     FormatType(int numType){
