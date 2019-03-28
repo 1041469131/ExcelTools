@@ -50,7 +50,10 @@ public class ObjectHelper {
 	 */
 	@SuppressWarnings("all")
 	public static boolean isEmpty(Object o)  {
-		if(o == null) return true;
+
+		if(o == null) {
+            return true;
+        }
 		if(o instanceof String) {
 			if(((String)o).length() == 0){
 				return true;
