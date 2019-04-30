@@ -1,4 +1,4 @@
-Jenkinsfile (Declarative Pipeline)
+Jenkinsfile ('jenkins-linux')
 pipeline {
     agent any
     stages {
