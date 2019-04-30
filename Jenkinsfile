@@ -1,4 +1,4 @@
-Jenkinsfile (Scripted Pipeline)
+Jenkinsfile ('jenkins-linux')
 node {
     stage('Build') {
         echo 'Building....'
