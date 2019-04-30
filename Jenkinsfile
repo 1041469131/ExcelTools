@@ -1,30 +1,28 @@
-Jenkinsfile ('jenkins-linux')
-pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building'
+Jenkinsfile (Scripted Pipeline)
+node {
+    stage('Build') {
+        echo 'Building....'
+          def TAG_NAME = binding.variables.get("TAG_NAME")
+                    if (TAG_NAME != null) {
+                        sh "echo tag $TAG_NAME"
+                    } else {
+                        sh "echo Non-tag build"
+                    }
+            withMaven(
+                           jdk:'jdk1.8-oracle',
+                           maven:'InstalledMaven',
+                           globalMavenSettingsConfig: '56ecb4c7-2efd-496d-949d-9209eee1c6a6',
+                           ) {
+                               sh "mvn clean package "
+                           }
 
-                withMaven(
-                                jdk:'jdk1.8-oracle',
-                                maven:'InstalledMaven',
-                                globalMavenSettingsConfig: '7e18ea53bead6cb35e6d4827192283a7cb04a6ec',
-                                ) {
-                                    sh "mvn clean package -DskipTests -U"
-                                }
 
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying'
-            }
-        }
+
+    }
+    stage('Test') {
+        echo 'Building....'
+    }
+    stage('Deploy') {
+        echo 'Deploying....'
     }
 }
