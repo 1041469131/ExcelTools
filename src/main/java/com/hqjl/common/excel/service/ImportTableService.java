@@ -155,7 +155,10 @@ public class ImportTableService {
             String[] column=new String[tableBean.getColumnCount()];
             System.arraycopy(sortedColumns,0,column,0,sortedColumns.length);
             for(int a=sortedColumns.length;a<column.length;a++){
-                column[a]=tableBean.getCellBean(startRow,a).getContent();
+                CellBean cellBean = tableBean.getCellBean(startRow, a);
+                if(cellBean!=null) {
+                    column[a] = cellBean.getContent();
+                }
             }
             sortedColumns=column;
         }
