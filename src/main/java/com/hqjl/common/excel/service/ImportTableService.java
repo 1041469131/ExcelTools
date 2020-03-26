@@ -97,7 +97,7 @@ public class ImportTableService {
                                 cellValue = cell.getBooleanCellValue() + "";
                             } else if (Cell.CELL_TYPE_FORMULA == cell.getCellType()) {
                                 try {
-                                    cellValue = String.valueOf(cell.getNumericCellValue());
+                                    cellValue = Double.valueOf(cell.getNumericCellValue()).longValue()+"";
                                 } catch (IllegalStateException e) {
                                     cellValue = String.valueOf(cell.getRichStringCellValue()).trim();
                                 }
