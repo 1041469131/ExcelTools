@@ -109,7 +109,7 @@ public class ImportTableService {
                                     cellValue = dff.format(date2);
                                 } else {
                                     //此处返回的是列数
-                                    cellValue = String.valueOf(cell.getNumericCellValue());
+                                    cellValue =  Double.valueOf(cell.getNumericCellValue()).longValue()+"";
                                 }
                             } else if (Cell.CELL_TYPE_STRING == cell.getCellType()) {
                                     cellValue = cell.getStringCellValue();
